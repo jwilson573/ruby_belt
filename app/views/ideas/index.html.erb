@@ -1,0 +1,77 @@
+<div class="row">
+    <div class="col-3"></div>
+    <h3>Why I say I say, HELLO THERE <%= @user.name.titleize %></h3>
+    <div class="col-9">
+    </div>
+    <a href='/logout' data-method="delete">Logout</a>
+</div>
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-4">
+            <!-- Idea Form (Herp a' derp!) -->
+            <h4>-----Tell Us Your Idea!-----</h4>
+            <form action="/ideas" method="post">
+                <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                
+                <div class="form-group">
+                    <label for="idea">Idea:</label>
+                    <textarea name="content" class="form-control" id="idea"></textarea>	
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit!</button>	
+            </form>
+            <!-- End Idea Form (Der der der der DERRRRRRRR)-->
+        </div>
+            
+        <div class="col-1">
+        </div>
+        
+</div>
+<div class="row">
+    <hr>
+</div>
+
+<!-- Nifty Ideas Below -->
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-5">
+        <% @ideas.each do |idea| %>
+
+            <h3> <%= idea.user.name.titleize %> Says:</h3>
+            <div>
+                <h5><%= idea.content %></h5>
+            </div>
+            <!-- This was intentional, I don't want you to be able to like your own idea you arrogant #$%@ (^_^) -->
+            <% unless idea.user_id == current_user.id %>
+                <% if current_user.liked_ideas.include? idea %>
+                    <!-- Unlike Button will display if user has already liked an idea -->
+                    <form action="/likes/<%= idea.id %>" method="post">
+                        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                        
+                        <input type="hidden" name="_method" value="delete">
+                        <button type="submit" class="btn btn-danger">Unlike</button>
+                    </form>
+                <% else %>
+                    <!-- Like Button will display if the user has not liked it already -->
+                    <form action="/likes" method="post">
+                        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                        <input type="hidden" name="like_id" value="<%= idea.id %>">
+                        <button type="submit" class="btn btn-success">Like</button>
+                    </form>
+                <% end %>
+            <% end %>
+            <p> <a href="/ideas/<%= idea.id %>"><%= idea.liked_by.count%> person(s) </a>like this.</p>
+            <!-- If statement to add a delete button if the logged in user created the idea -->
+            <% if idea.user_id == current_user.id %>
+                <form action="/ideas/<%= idea.id %>" method="post">
+                    <input type="hidden" name="authenticity_token" value="form_authenticity_token" >
+                    <input type="hidden" name="_method" value="delete">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            <% end %>
+        <% end %>
+        
+    </div>
+</div>
+
+<!-- End Nifty Ideas -->

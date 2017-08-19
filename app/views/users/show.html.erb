@@ -1,0 +1,12 @@
+<a href="/ideas"> Back to Ideas </a>
+<a href='/logout' data-method="delete">Logout</a>
+<hr>
+<h3>Name: <%= @user.name.titleize %></h3>
+<h3>Alias: <%= @user.alias.titleize %></h3>
+<h3>Email: <%= @user.email %></h3>
+
+
+<hr>
+
+<h5>Total Number of Likes: <%= @user.liked_ideas.count %></h5>
+<h5>Total Number of Ideas: <%= @user.ideas.count %></h5>

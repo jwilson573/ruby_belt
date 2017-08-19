@@ -1,0 +1,26 @@
+<a href="/ideas"> Back to Ideas </a>
+<a href='/logout' data-method="delete">Logout</a>
+
+<h5><%= @idea.user.alias.titleize %> says:</h5>
+
+<h1><%= @idea.content %></h1>
+
+<h2>Users Who Lika Dis</h2>
+<!-- Only other users who like your idea -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Alias</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @idea.liked_by.each do |user| %>
+            <tr>
+                <td><a href="/users/<%= user.id %>"><%= user.alias.titleize %></a></td>
+                <td><%= user.name.titleize %></td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+<!-- End Table of other users who like your idea -->
